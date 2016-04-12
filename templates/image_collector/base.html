@@ -1,0 +1,125 @@
+<!DOCTYPE html>{% load staticfiles %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %} | Image Collector</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'image_collector/style.css' %}">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+</head>
+
+<body>
+    <div role="document" class="container">
+        <!-- NAV -->
+        <nav class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="{% url 'ic:index' %}">Image Collector</a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        {% block nav-home %}<li><a href="{% url 'ic:index' %}">Home</a></li>{% endblock %}
+                        {% block nav-sites %}<li><a href="{% url 'ic:sites_view' %}">Websites</a></li>{% endblock %}
+                        {% block nav-users %}<li><a href="{% url 'ic:users_view' %}">Users</a></li>{% endblock %}
+                    </ul>
+                </div>
+                <!--/.nav-collapse -->
+            </div>
+        </nav>
+        <ul class="breadcrumb">
+            {% for breadcrumb in breadcrumbs %}{% if breadcrumb.active %}
+            <li class="active">{{ breadcrumb.name }}</li>{% else %}
+            <li><a href="{{ breadcrumb.link }}">{{ breadcrumb.name }}</a></li>{% endif %}{% endfor %}
+        </ul>
+        <!-- /NAV -->
+
+        <!-- ERROR HANDLING -->
+        {% if error %}
+        <div class="alert alert-warning" role="alert">
+            <strong>Warning!</strong> Nothing found matching your query<br/>
+            {{ error_msg }}
+        </div>
+        {% endif %}
+        <!-- /ERROR HANDLING -->
+
+        <!-- PAGINATION -->
+        {% if posts.has_previous or posts.has_next or users.has_previous or users.has_next or sites.has_previous or sites.has_next %}
+        <div class="pagination">
+            <span class="step-links">
+                {% if posts.has_previous %}
+                    <a href="?page={{ posts.previous_page_number }}">Previous</a>
+                {% elif users.has_previous %}
+                    <a href="?page={{ users.previous_page_number }}">Previous</a>
+                {% elif sites.has_previous %}
+                    <a href="?page={{ sites.previous_page_number }}">Previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ posts.number }} of {{ posts.paginator.num_pages }}
+                </span>
+
+                {% if posts.has_next %}
+                    <a href="?page={{ posts.next_page_number }}">Next</a>
+                {% elif users.has_next %}
+                    <a href="?page={{ users.next_page_number }}">Next</a>
+                {% elif sites.has_next %}
+                    <a href="?page={{ sites.next_page_number }}">Next</a>
+                {% endif %}
+            </span>
+        </div>
+        {% endif %}
+        <!-- PAGINATION -->
+
+        <div class="row">
+        <!-- CONTENT -->
+            {% block content %} {% endblock %}
+        <!-- /CONTENT -->
+        </div>
+
+        <!-- PAGINATION -->
+        {% if posts.has_previous or posts.has_next or users.has_previous or users.has_next or sites.has_previous or sites.has_next %}
+        <div class="pagination">
+            <span class="step-links">
+                {% if posts.has_previous %}
+                    <a href="?page={{ posts.previous_page_number }}">Previous</a>
+                {% elif users.has_previous %}
+                    <a href="?page={{ users.previous_page_number }}">Previous</a>
+                {% elif sites.has_previous %}
+                    <a href="?page={{ sites.previous_page_number }}">Previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ posts.number }} of {{ posts.paginator.num_pages }}
+                </span>
+
+                {% if posts.has_next %}
+                    <a href="?page={{ posts.next_page_number }}">Next</a>
+                {% elif users.has_next %}
+                    <a href="?page={{ users.next_page_number }}">Next</a>
+                {% elif sites.has_next %}
+                    <a href="?page={{ sites.next_page_number }}">Next</a>
+                {% endif %}
+            </span>
+        </div>
+        {% endif %}
+        <!-- PAGINATION -->
+
+    </div>  <!-- container div -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</body>
+
+</html>

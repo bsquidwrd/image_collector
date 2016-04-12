@@ -1,0 +1,17 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# DESIGNER/IMPLEMENTER/MAGIC MAN
+
+    bsquidwrd
+
+# THANKS
+
+    Myself
+    Stack Overflow and Reddit for answering a few of my dumb questions
+
+# TECHNOLOGY COLOPHON
+
+    CSS, HTML, Python, Django,
+    PostgreSQL, Bootstrap,
+    nginx, BitBucket and git

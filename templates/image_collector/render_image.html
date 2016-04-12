@@ -1,0 +1,12 @@
+{% load staticfiles %}
+{% if post.title != image.title %}<div class="image_title">{{ image.title }}</div>{% else %}<br/>{% endif %}
+{% if image.mime_type.video %}
+    <video width="auto" autoplay loop>
+        <source src="{{ image.file.url }}" type="{{ image.mime_type.mime }}">
+        Your browser does not support HTML5 video.
+    </video>
+{% else %}
+    <img src="{{ image.file.url }}" />
+{% endif %}
+<br/>
+{% if image.description.strip|length > 2 %}<div class="image_description well">{{ image.description |safe}}</div>{% endif %}

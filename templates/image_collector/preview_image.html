@@ -1,0 +1,11 @@
+{% load staticfiles %}
+{% if image.title != post.title %}<div class="image_title">{{ image.title }}</div>{% else %}<br/>{% endif %}
+{% if image.mime_type.video %}
+    <video width="auto" autoplay loop>
+        <source src="{{ image.file.url }}" type="{{ image.mime_type.mime }}">
+        Your browser does not support HTML5 video.
+    </video>
+{% else %}
+    <img src="{% static 'image_collector/img_trans.gif' %}" style="height: 325px; width: auto; background: url({{ image.file.url }}) -125px -125px;" />
+{% endif %}
+<br/>

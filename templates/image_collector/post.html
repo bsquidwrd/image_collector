@@ -1,0 +1,35 @@
+{% extends 'image_collector/base.html' %}
+{% block title %}{{ post.title }}{% endblock %}
+{% block nav-users %}<li class="active"><a href="{% url 'ic:user_view' post.user.username %}">User</a></li>{% endblock %}
+{% block content %}
+<div class="col-sm-9">
+    <div class="{% if post.nsfw %}post_nsfw{% else %}post{% endif %} panel panel-primary" id="{{ post.pk }}">
+        <div class="panel-heading">
+            <h3 class="post_title panel-title">
+                {{ post.title }}
+            </h3>
+        </div>
+        {% for image in post.images.all %}
+        <div class="post_item panel-body" id="{{ image.image_id }}">
+            {% include 'image_collector/render_image.html' %}
+        </div><br />
+        {% endfor %}
+    </div>
+</div>
+<div class="col-sm-3" id="sidebar">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h3 class="panel-title" align="center">Info</h3>
+        </div>
+        <div class="panel-body">
+            <div class="well"><p>
+                Post originally submitted by <a href="{% url 'ic:user_view' post.user.username %}">{{ post.user }}</a>
+                on <a href="{% url 'ic:site_view' post.website.short_name %}">{{ post.website }}</a>
+                </p>{% if post.permalink|length > 2 %}<p align="center">
+                    <a href="{{ post.permalink }}" target="_blank"><button type="button" class="btn btn-sm btn-primary">Permalink</button></a>
+                </p>{% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

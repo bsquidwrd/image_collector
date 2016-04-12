@@ -1,0 +1,32 @@
+.post_title {
+    text-align: center;
+}
+
+div.pagination {
+    margin: auto;
+}
+
+div.post_item {
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+}
+
+img {
+    width: 100%;
+    height: auto;
+}
+
+video {
+    width: 100%;
+    height: auto;
+}
+
+.image_title {
+    text-align: center;
+}
+
+.my-button {
+    width: 100%;
+    text-align: center;
+}
