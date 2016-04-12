@@ -66,7 +66,14 @@
                 {% endif %}
 
                 <span class="current">
-                    Page {{ posts.number }} of {{ posts.paginator.num_pages }}
+                    Page
+                    {% if posts %}
+                        {{ posts.number }} of {{ posts.paginator.num_pages }}
+                    {% elif users %}
+                        {{ users.number }} of {{ users.paginator.num_pages }}
+                    {% elif sites %}
+                        {{ sites.number }} of {{ sites.paginator.num_pages }}
+                    {% endif %}
                 </span>
 
                 {% if posts.has_next %}
