@@ -64,14 +64,6 @@ def download_user_favorites(username, bad_tries=0):
     gallery_info = json.loads(gallery_profile.text)['data']
 
     if gallery_profile.ok and gallery_profile.status_code not in quit_codes.keys():
-        profile_etag = gallery_profile.headers['ETag']
-        if profile_etag == storageData.get(username.lower()):
-            print("Imgur Favorites: ETag has not changed for %s" % username)
-            return True
-        else:
-            storageData[username.lower()] = profile_etag
-            storage.update_data(storageData)
-
         # Get total gallery favorites and divide by 60, which for now
         # seems to be the amount sent by the favorites API endpoint
         total_posts = int(float(gallery_info['total_gallery_favorites']))
@@ -110,7 +102,10 @@ def download_user_favorites(username, bad_tries=0):
                         permalink=item.get('link'),
                         nsfw=post_nsfw
                     )
-                    post.process()
+                    try:
+                        post.process()
+                    except:
+                        continue
 
                     # If the favorite is an album, get the album and loop through it
                     # This will also save the album in a folder named by the album id
@@ -165,9 +160,6 @@ def download_user_favorites(username, bad_tries=0):
                 else:
                     # If I've tried 5 times, quit and let the user figure out the issue
                     pass
-
-        storageData[username.lower()] = profile_etag
-        storage.update_data(storageData)
         return True
 
     else:

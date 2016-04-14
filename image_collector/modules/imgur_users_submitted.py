@@ -64,11 +64,6 @@ def download_user_submissions(username, bad_tries=0):
     gallery_info = json.loads(gallery_profile.text)['data']
 
     if gallery_profile.ok and gallery_profile.status_code not in quit_codes.keys():
-        profile_etag = gallery_profile.headers['ETag']
-        if profile_etag == storageData.get(username.lower()):
-            print("Imgur Submissions: ETag has not changed for %s" % username)
-            return True
-
         # Get total gallery submissions and divide by 60, which for now
         # seems to be the amount sent by the submissions API endpoint
         total_posts = int(float(gallery_info['total_gallery_submissions']))
@@ -95,6 +90,10 @@ def download_user_submissions(username, bad_tries=0):
                     post_description = item.get('description')
                     if post_description is None:
                         post_description = ''
+                    post_nsfw = item.get('nsfw', False)
+                    if post_nsfw is None:
+                        post_nsfw = False
+
                     post = PostInstance(
                         website=credentials.website,
                         title=item.get('title', ''),
@@ -114,18 +113,14 @@ def download_user_submissions(username, bad_tries=0):
                         album_url = '%s/album/%s/images?%s' % (base_api_url, item['id'], global_parameters)
                         album_id = item['id']
                         album_response = requests.get(url=album_url, headers=request_headers)
-                        etag = album_response.headers['ETag']
+                        album_etag = album_response.headers['ETag']
                         if album_response.ok:
-                            if etag == post.get_etag():
+                            if album_etag == post.get_etag():
                                 continue
-                            else:
-                                post.set_etag(album_response.headers['ETag'])
                             album_json = json.loads(album_response.text)
                             for image in album_json['data']:
-                                try:
-                                    process_image(image=image, username=username, post=post)
-                                except:
-                                    continue
+                                process_image(image=image, username=username, post=post)
+                            post.set_etag(album_etag)
                         else:
                             pass
                     else:
@@ -165,9 +160,6 @@ def download_user_submissions(username, bad_tries=0):
                 else:
                     # If I've tried 5 times, quit and let the user figure out the issue
                     pass
-
-        storageData[username.lower()] = profile_etag
-        storage.update_data(storageData)
         return True
 
     else:
