@@ -100,7 +100,7 @@ def download_user_submissions(username, bad_tries=0):
                         description=post_description.replace('\n', '<br/>'),
                         user=user,
                         permalink=item.get('link'),
-                        nsfw=item.get('nsfw', False)
+                        nsfw=post_nsfw
                     )
                     try:
                         post.process()
