@@ -1,7 +1,9 @@
 {% extends 'image_collector/base.html' %}
+{% block custom-post-css %}{% endblock %}
 {% block title %}{{ post.title }}{% endblock %}
 {% block nav-users %}<li class="active"><a href="{% url 'ic:user_view' post.user.username %}">User</a></li>{% endblock %}
 {% block content %}
+<div class="row">
 <div class="col-sm-9">
     <div class="{% if post.nsfw %}post_nsfw{% else %}post{% endif %} panel panel-primary" id="{{ post.pk }}">
         <div class="panel-heading">
@@ -31,5 +33,6 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 {% endblock %}

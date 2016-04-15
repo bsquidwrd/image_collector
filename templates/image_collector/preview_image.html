@@ -6,6 +6,6 @@
         Your browser does not support HTML5 video.
     </video>
 {% else %}
-    <img src="{% static 'image_collector/img_trans.gif' %}" style="height: 325px; width: auto; background: url({{ image.file.url }}) -125px -125px;" />
+    <img src="{{ image.file.url }}" class="img-thumbnail" />
 {% endif %}
 <br/>

@@ -3,7 +3,6 @@
 {% block nav-home %}<li class="active"><a href="{% url 'ic:index' %}">Home</a></li>{% endblock %}
 {% block content %}
 {% for post in posts %}
-<div class="col-sm-4">
 <div class="{% if post.nsfw %}post_nsfw{% else %}post{% endif %} panel panel-primary" id="{{ post.pk }}">
     <div class="panel-heading">
         <h3 class="post_title panel-title">
@@ -18,7 +17,6 @@
     </div><br />
     {% endwith %}
     </a>
-</div>
 </div>
 {% endfor %}
 {% endblock %}

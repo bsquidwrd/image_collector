@@ -1,19 +1,15 @@
 {% extends 'image_collector/base.html' %}
 {% block title %}{{ grid_title }}{% endblock %}
 {% block content %}
-<div class="row">
 {% for object in objects %}
-    <div class="col-sm-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">{{ object.name }} <span class="badge">{{ object.count }}</span></h3>
-            </div>
-            <div class="panel-body">
-                <a role="button" class="btn btn-lg btn-primary my-button" href="{{ object.link }}">View</a>
-                {% if object.notes|length > 2 %}<br/><br/><div class="well">{{ object.notes |safe }}</div>{% endif %}
-            </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ object.name }} <span class="badge">{{ object.count }}</span></h3>
+        </div>
+        <div class="panel-body">
+            <a role="button" class="btn btn-lg btn-primary my-button" href="{{ object.link }}">View</a>
+            {% if object.notes|length > 2 %}<br/><br/><div class="well">{{ object.notes |safe }}</div>{% endif %}
         </div>
     </div>
 {% endfor %}
-</div>
 {% endblock %}
