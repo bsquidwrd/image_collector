@@ -1,5 +1,4 @@
 {% load staticfiles %}
-{% if image.title != post.title %}<div class="image_title">{{ image.title }}</div>{% else %}<br/>{% endif %}
 {% if image.mime_type.video %}
     <video width="auto" autoplay loop>
         <source src="{{ image.file.url }}" type="{{ image.mime_type.mime }}">
@@ -8,4 +7,3 @@
 {% else %}
     <img src="{{ image.file.url }}" class="img-thumbnail" />
 {% endif %}
-<br/>
