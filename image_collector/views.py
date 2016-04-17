@@ -5,7 +5,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from image_collector.models import Post, Image, ImageUser, Website, MimeType, Extension
 
-items_per_page = '15'
+items_per_page = '50'
 
 
 def index_view(request):
