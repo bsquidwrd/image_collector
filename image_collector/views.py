@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from django.http.response import HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Q
 
 from image_collector.models import Post, Image, ImageUser, Website, MimeType, Extension
 
@@ -11,8 +12,14 @@ items_per_page = '50'
 def index_view(request):
     template = 'image_collector/home.html'
     breadcrumbs = []
+    search_key = None
 
     post_list = Post.objects.filter(active=True)
+    try:
+        search_key = request.GET.get('search')
+        post_list = post_list.filter(Q(title__contains=search_key) | Q(description__contains=search_key)).order_by('timestamp')
+    except:
+        pass
     paginator = Paginator(post_list, items_per_page)
     page = request.GET.get('page')
     try:
@@ -32,12 +39,16 @@ def index_view(request):
         return render(request, template, context={
             'breadcrumbs': breadcrumbs,
             'error': True,
-            'error_msg': 'No posts found for any sites'
+            'error_msg': 'No posts found',
+            'search': (search_key if search_key else False),
         })
+
     context = {
         'posts': posts,
         'breadcrumbs': breadcrumbs,
+        'search': (search_key if search_key else False),
     }
+    print(context)
     return render(request, template, context=context)
 
 
@@ -99,6 +110,7 @@ def sites_view(request):
 def site_view(request, site):
     template = 'image_collector/website.html'
     breadcrumbs = []
+    search_key = None
     breadcrumbs.append({
         'name': 'Home',
         'link': reverse('ic:index'),
@@ -124,7 +136,13 @@ def site_view(request, site):
     })
 
     post_list = Post.objects.filter(website=requested_website, active=True)
-    paginator = Paginator(post_list, 12)
+    try:
+        search_key = request.GET.get('search')
+        post_list = post_list.filter(Q(title__contains=search_key) | Q(description__contains=search_key)).order_by(
+            'timestamp')
+    except:
+        pass
+    paginator = Paginator(post_list, items_per_page)
     page = request.GET.get('page')
     try:
         posts = paginator.page(page)
@@ -137,12 +155,14 @@ def site_view(request, site):
         return render(request, template, context={
             'breadcrumbs': breadcrumbs,
             'error': True,
-            'error_msg': 'No posts found for requested site'
+            'error_msg': 'No posts found for requested site',
+            'search': (search_key if search_key else False),
         })
     context = {
         'posts': posts,
         'site': requested_website,
         'breadcrumbs': breadcrumbs,
+        'search': (search_key if search_key else False),
     }
     return render(request, template, context=context)
 
@@ -214,7 +234,7 @@ def users_view(request):
             return render(request, template, context={
                 'breadcrumbs': breadcrumbs,
                 'error': True,
-                'error_msg': 'No users found'
+                'error_msg': 'No users found',
             })
 
         objects = []
@@ -244,6 +264,7 @@ def users_view(request):
 def user_view(request, username):
     template = 'image_collector/user.html'
     breadcrumbs = []
+    search_key = None
     try:
         image_user = ImageUser.objects.get(username__iexact=username)
         breadcrumbs.append({
@@ -265,6 +286,12 @@ def user_view(request, username):
             return redirect(reverse('ic:user_view', args=(image_user.username,)))
 
         post_list = Post.objects.filter(user=image_user, active=True)
+        try:
+            search_key = request.GET.get('search')
+            post_list = post_list.filter(Q(title__contains=search_key) | Q(description__contains=search_key)).order_by(
+                'timestamp')
+        except:
+            pass
         paginator = Paginator(post_list, items_per_page)
         page = request.GET.get('page')
         try:
@@ -278,12 +305,14 @@ def user_view(request, username):
             return render(request, template, context={
                 'breadcrumbs': breadcrumbs,
                 'error': True,
-                'error_msg': 'No posts for requested user found'
+                'error_msg': 'No posts for requested user found',
+                'search': (search_key if search_key else False),
             })
         context = {
             'image_user': image_user,
             'posts': posts,
             'breadcrumbs': breadcrumbs,
+            'search': (search_key if search_key else False),
         }
         return render(request, template, context=context)
     except Exception as e:
