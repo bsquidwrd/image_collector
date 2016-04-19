@@ -72,6 +72,7 @@ class Website(models.Model):
 
 class Credential(models.Model):
     website = models.ForeignKey(Website)
+    name = models.CharField(max_length=255, blank=True, null=True)
     username = models.CharField(max_length=255, blank=True)
     password = models.CharField(max_length=255, blank=True)
     api_key = models.CharField(max_length=255, blank=True)
@@ -86,7 +87,7 @@ class Credential(models.Model):
     notes = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
-        return "Credentials for %s %s" % (str(self.website), str(self.credential_key))
+        return "Credentials for %s (%s)" % (str(self.name), str(self.credential_key))
 
 
 class ImageUser(models.Model):
@@ -151,7 +152,7 @@ class Storage(models.Model):
     jsonData = JSONField(default=defaultJson)
 
     def __str__(self):
-        return "Storage for %s" % str(self.credential)
+        return "Storage for %s" % str(self.credential.name)
 
 ##
 # Catch signals and do things with them
