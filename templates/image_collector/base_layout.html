@@ -1,0 +1,21 @@
+{% extends 'image_collector/base.html' %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block content %}
+{% for post in posts %}
+<div class="{% if post.nsfw %}post_nsfw{% else %}post{% endif %} panel panel-primary" id="{{ post.pk }}">
+    <div class="panel-heading">
+        <h3 class="post-title panel-title">
+            <a href="{% url 'ic:post_view' post.pk %}">{{ post.title |truncatechars:40}}</a>
+            {% if post.images.all.count > 1 %}<span class="badge pull-right">{{ post.images.all.count }}</span>{% endif %}
+        </h3>
+    </div>
+    <a href="{% url 'ic:post_view' post.pk %}">
+    {% with image=post.images.all.0 %}
+    <div class="post-image panel-body" id="{{ image.image_id }}">
+        {% include 'image_collector/render_image.html' %}
+    </div>
+    {% endwith %}
+    </a>
+</div>
+{% endfor %}
+{% endblock %}

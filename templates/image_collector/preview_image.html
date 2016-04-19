@@ -1,9 +1,0 @@
-{% load staticfiles %}
-{% if image.mime_type.video %}
-    <video width="auto" autoplay loop>
-        <source src="{{ image.file.url }}" type="{{ image.mime_type.mime }}">
-        Your browser does not support HTML5 video.
-    </video>
-{% else %}
-    <img src="{{ image.file.url }}" class="img-thumbnail" />
-{% endif %}

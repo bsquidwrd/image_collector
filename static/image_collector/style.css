@@ -1,4 +1,4 @@
-.post_title {
+.post-title {
     text-align: center;
 }
 
@@ -6,7 +6,7 @@ div.pagination {
     margin: auto;
 }
 
-div.post_item {
+div.post-item {
     position: relative;
     width: 100%;
     margin: 0 auto;
@@ -22,11 +22,15 @@ video {
     height: auto;
 }
 
-.image_title {
+.image-title {
     text-align: center;
 }
 
 .my-button {
     width: 100%;
     text-align: center;
+}
+
+.word-wrap {
+    word-wrap: break-word;
 }

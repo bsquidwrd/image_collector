@@ -4,16 +4,17 @@
 {% block nav-users %}<li class="active"><a href="{% url 'ic:user_view' post.user.username %}">User</a></li>{% endblock %}
 {% block content %}
 <div class="col-sm-9">
-    <div class="{% if post.nsfw %}post_nsfw{% else %}post{% endif %} panel panel-primary" id="{{ post.pk }}">
+    <div class="{% if post.nsfw %}nsfw{% endif %} post panel panel-primary" id="{{ post.pk }}">
         <div class="panel-heading">
-            <h3 class="post_title panel-title">
-                {{ post.title }}
+            <h3 class="post-title panel-title">
+                {{ post.title |truncatechars:40}}{% if post.images.all.count > 1 %}<span class="badge pull-right">{{ post.images.all.count }}</span>{% endif %}
             </h3>
         </div>
+        {% if post.description.strip|length > 2 %}<div class="post-description word-wrap well">{{ post.description |safe}}</div>{% endif %}
         {% for image in post.images.all %}
-        <div class="post_item panel-body" id="{{ image.image_id }}">
+        <div class="post-image panel-body" id="{{ image.image_id }}">
             {% include 'image_collector/render_image.html' %}
-        </div><br />
+        </div>
         {% endfor %}
     </div>
 </div>
@@ -23,10 +24,10 @@
             <h3 class="panel-title" align="center">Info</h3>
         </div>
         <div class="panel-body">
-            <div class="well"><p>
+            <div class="word-wrap well"><p>
                 Post originally submitted by <a href="{% url 'ic:user_view' post.user.username %}">{{ post.user }}</a>
                 on <a href="{% url 'ic:site_view' post.website.short_name %}">{{ post.website }}</a>
-                </p>{% if post.permalink|length > 2 %}<p align="center">
+                </p>{% if post.permalink|length > 2 %}<p align="center" class="post-permalink">
                     <a href="{{ post.permalink }}" target="_blank"><button type="button" class="btn btn-sm btn-primary">Permalink</button></a>
                 </p>{% endif %}
             </div>
