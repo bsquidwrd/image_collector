@@ -72,7 +72,7 @@ class Website(models.Model):
 
 class Credential(models.Model):
     website = models.ForeignKey(Website)
-    name = models.CharField(max_length=255, blank=True, null=True)
+    name = models.CharField(max_length=255)
     username = models.CharField(max_length=255, blank=True)
     password = models.CharField(max_length=255, blank=True)
     api_key = models.CharField(max_length=255, blank=True)
