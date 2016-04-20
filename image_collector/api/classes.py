@@ -289,10 +289,9 @@ class WebsiteInstance:
         return self.website
 
     def get_website(self):
-        if isinstance(self.website, Website):
-            return self.website
-        else:
-            return self.process()
+        if not isinstance(self.website, Website):
+            self.process()
+        return self.website
 
 
 class CredentialInstance:
