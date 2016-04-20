@@ -30,9 +30,9 @@
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        {% block nav-home %}<li class="{% if home %}active{% endif %}"><a href="{% url 'ic:index' %}">Home</a></li>{% endblock %}
-                        {% block nav-sites %}<li class="{% if website %}active{% endif %}"><a href="{% url 'ic:sites_view' %}">Websites</a></li>{% endblock %}
-                        {% block nav-users %}<li class="{% if image_user %}active{% endif %}"><a href="{% url 'ic:users_view' %}">Users</a></li>{% endblock %}
+                        <li class="{% if home %}active{% endif %}"><a href="{% url 'ic:index' %}">Home</a></li>
+                        <li class="{% if website %}active{% endif %}"><a href="{% url 'ic:sites_view' %}">Websites</a></li>
+                        <li class="{% if image_user %}active{% endif %}"><a href="{% url 'ic:users_view' %}">Users</a></li>
                     </ul>
                     <div class="col-sm-3 col-md-3 pull-right">
                         <form class="navbar-form" role="search">
@@ -52,6 +52,7 @@
             {% for breadcrumb in breadcrumbs %}{% if breadcrumb.active %}
             <li class="active">{{ breadcrumb.name }}</li>{% else %}
             <li><a href="{{ breadcrumb.link }}">{{ breadcrumb.name }}</a></li>{% endif %}{% endfor %}
+            <li class="pull-right"><a href="{% url 'ic:random_view' %}">Random Post</a></li>
         </ul>
         <!-- /NAV -->
 

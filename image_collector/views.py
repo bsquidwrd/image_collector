@@ -1,3 +1,4 @@
+import random
 import operator
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
@@ -416,6 +417,18 @@ def user_view(request, username):
             'search': (search_key if search_key else False),
             'page_title': page_title,
         })
+
+
+def random_view(request):
+    posts = Post.objects.all()
+    post_ids = [post.pk for post in posts]
+    post_id = random.choice(post_ids)
+    return redirect(reverse('ic:post_view', kwargs={'post_id': post_id}))
+
+
+def newest_view(request):
+    posts = Post.objects.all().order_by('-timestamp')
+    return redirect(reverse('ic:post_view', kwargs={'post_id': posts[0].pk}))
 
 
 def image_view(request, requested_image):

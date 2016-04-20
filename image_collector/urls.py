@@ -10,6 +10,8 @@ from image_collector import views
 
 urlpatterns = [
     url(r'^$', views.index_view, name='index'),
+    url(r'^random$', views.random_view, name='random_view'),
+    url(r'^newest$', views.newest_view, name='newest_view'),
     url(r'^user$', views.users_view, name='users_view'),
     url(r'^user/(?P<username>\w+)$', views.user_view, name='user_view'),
     url(r'^site$', views.sites_view, name='sites_view'),
