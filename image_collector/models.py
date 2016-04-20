@@ -81,6 +81,7 @@ class Credential(models.Model):
     authorization_code = models.CharField(max_length=255, blank=True)
     pin_code = models.CharField(max_length=255, blank=True)
     client_id = models.CharField(max_length=255, blank=True)
+    client_secret = models.CharField(max_length=255, blank=True)
     # Doing this for easier reference in code and such
     # since there can be multiple credentials for 1 website
     credential_key = models.CharField(max_length=255, blank=True)
