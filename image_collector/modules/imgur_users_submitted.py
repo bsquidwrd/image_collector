@@ -223,7 +223,7 @@ def handle_command():
     ).get_website()
     if website != credentials.website:
         return False
-    users = ['bsquidwrd', 'TheSmartyCat', 'ropebaby', 'MaxDragon']
+    users = storageData.get('users', ['bsquidwrd'])
     for user in users:
         download_user_submissions(user)
 
