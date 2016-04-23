@@ -7,7 +7,7 @@
     <div class="{% if post.nsfw %}nsfw{% endif %} post panel panel-primary" id="{{ post.pk }}">
         <div class="panel-heading">
             <h3 class="post-title panel-title">
-                {{ post.title |truncatechars:40}}{% if post.images.all.count > 1 %}<span class="badge pull-right">{{ post.images.all.count }}</span>{% endif %}
+                {{ post.title }}{% if post.images.all.count > 1 %}<span class="badge pull-right">{{ post.images.all.count }}</span>{% endif %}
             </h3>
         </div>
         {% if post.description.strip|length > 2 %}<div class="post-description word-wrap well">{{ post.description |safe}}</div>{% endif %}
