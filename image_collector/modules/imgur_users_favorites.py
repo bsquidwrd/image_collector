@@ -7,6 +7,7 @@ import requests
 import json
 import time
 import math
+import re
 
 from image_collector.api.classes import WebsiteInstance, UserInstance
 from image_collector.api.classes import PostInstance, ImageInstance
@@ -45,6 +46,8 @@ request_headers = {
 }
 hashes = {}
 users_to_download = []
+
+linkRegex = re.compile(r'\b(([\w-]+://?|www[.])[^\s()<>]+(?:\([\w\d]+\)|([^%s\s]|/)))')
 
 
 class RateLimitHit(Exception):
@@ -97,7 +100,7 @@ def download_user_favorites(username, bad_tries=0):
                     post = PostInstance(
                         website=credentials.website,
                         title=item.get('title', ''),
-                        description=post_description.replace('\n', '<br/>'),
+                        description=linkRegex.sub(r'<a target="_blank" href="\1">\1</a>', post_description.replace('\n', '<br/>')),
                         user=user,
                         permalink=item.get('link'),
                         nsfw=post_nsfw
@@ -204,7 +207,7 @@ def process_image(image, username, post=None):
         processed_image = ImageInstance(
             url=image_url,
             title=image_title,
-            description=image_description.replace('\n', '<br/>')
+            description=linkRegex.sub(r'<a target="_blank" href="\1">\1</a>', image_description.replace('\n', '<br/>')),
         ).process()
         post.add_image(processed_image)
         print("Processed favorite for %s image %s for post %s" % (username, processed_image, post.get_post()))
@@ -225,5 +228,8 @@ def handle_command():
         return False
     users = storageData.get('users', ['bsquidwrd'])
     for user in users:
-        download_user_favorites(user)
+        try:
+            download_user_favorites(user)
+        except:
+            continue
 

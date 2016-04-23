@@ -225,5 +225,8 @@ def handle_command():
         return False
     users = storageData.get('users', ['bsquidwrd'])
     for user in users:
-        download_user_submissions(user)
+        try:
+            download_user_submissions(user)
+        except:
+            continue
 

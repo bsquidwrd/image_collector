@@ -22,6 +22,7 @@ class Command(BaseCommand):
             sub_modules.append(str(modname))
 
         for m in sub_modules:
+            print("Starting module %s" % m.split('.')[-1])
             i = importlib.import_module(m)
             try:
                 run_command = getattr(i, 'handle_command')
@@ -29,4 +30,5 @@ class Command(BaseCommand):
             except Exception as e:
                 print(e)
                 continue
+
 
