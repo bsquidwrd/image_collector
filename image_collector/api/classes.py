@@ -336,8 +336,11 @@ class StorageInstance:
             if len(possible_storage) == 1:
                 self.storage = possible_storage[0]
                 self.data = self.storage.jsonData
-            elif len(possible_storage) > 1:
+            elif len(possible_storage) < 1:
                 raise InvalidStorage
+            elif len(possible_storage) > 1:
+                self.storage = possible_storage[0]
+                self.data = self.storage.jsonData
             else:
                 self.storage = Storage.objects.create(credential=self.credential.get_credential())
                 self.data = self.storage.jsonData

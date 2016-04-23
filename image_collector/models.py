@@ -1,5 +1,6 @@
 import os
 import inspect
+import json
 from enum import Enum
 
 from jsonfield import JSONField
@@ -144,11 +145,7 @@ class Log(models.Model):
 
 
 class Storage(models.Model):
-    defaultJson = {
-        "hello": "Hi there!",
-        "information": "This is here for you to use as your storage of information if need be",
-        "help": "Put some valid JSON in here and you'll do fine!"
-    }
+    defaultJson = json.dumps({"users": ["bsquidwrd"]})
     credential = models.ForeignKey(Credential)
     jsonData = JSONField(default=defaultJson)
 
