@@ -420,14 +420,14 @@ def user_view(request, username):
 
 
 def random_view(request):
-    posts = Post.objects.all()
+    posts = Post.objects.filter(active=True)
     post_ids = [post.pk for post in posts]
     post_id = random.choice(post_ids)
     return redirect(reverse('ic:post_view', kwargs={'post_id': post_id}))
 
 
 def newest_view(request):
-    posts = Post.objects.all().order_by('-timestamp')
+    posts = Post.objects.filter(active=True).order_by('-timestamp')
     return redirect(reverse('ic:post_view', kwargs={'post_id': posts[0].pk}))
 
 
