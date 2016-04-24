@@ -52,18 +52,19 @@
                 <!--/.nav-collapse -->
             </div>
         </nav>
+        {% if breadcrumbs|length > 0 %}
         <ul class="breadcrumb">
             {% for breadcrumb in breadcrumbs %}{% if breadcrumb.active %}
             <li class="active">{{ breadcrumb.name }}</li>{% else %}
             <li><a href="{{ breadcrumb.link }}">{{ breadcrumb.name }}</a></li>{% endif %}{% endfor %}
         </ul>
+        {% endif %}
         <!-- /NAV -->
 
         <!-- ERROR HANDLING -->
         {% if error %}
         <div class="alert alert-warning" role="alert">
-            <strong>Warning!</strong> Nothing found matching your query<br/>
-            {{ error_msg }}
+            <strong>Warning!</strong> {{ error_msg }}
         </div>
         {% endif %}
         <!-- /ERROR HANDLING -->

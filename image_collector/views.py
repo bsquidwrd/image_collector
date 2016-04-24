@@ -226,16 +226,19 @@ def site_view(request, site):
 
 def post_view(request, post_id):
     template = 'image_collector/post.html'
+    index_template = 'image_collector/base_layout.html'
     breadcrumbs = []
     page_title = "No post found"
+
     try:
         post = Post.objects.get(pk=post_id)
         page_title = str(post.title)
     except Exception as e:
-        return render(request, template, context={
+        return render(request, index_template, context={
             'breadcrumbs': breadcrumbs,
             'error': True,
-            'error_msg': str(e)
+            'page_title': page_title,
+            'error_msg': str(e),
         })
 
     breadcrumbs.append({
@@ -243,6 +246,7 @@ def post_view(request, post_id):
         'link': reverse('ic:index'),
         'active': False,
     })
+
     breadcrumbs.append({
         'name': 'Users',
         'link': reverse('ic:users_view'),

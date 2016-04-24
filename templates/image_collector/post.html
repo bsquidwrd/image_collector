@@ -13,7 +13,9 @@
         {% if post.description.strip|length > 2 %}<div class="post-description word-wrap well">{{ post.description |safe}}</div>{% endif %}
         {% for image in post.images.all %}
         <div class="post-image panel-body" id="{{ image.image_id }}">
-            {% include 'image_collector/render_post_image.html' %}
+            {% if post.title != image.title %}<div class="image-title h3">{{ image.title }}</div>{% else %}<br/>{% endif %}
+            {% include 'image_collector/render_image.html' %}
+            {% if image.description.strip|length > 2 and post.description != image.description %}<div class="image-description word-wrap well">{{ image.description |safe}}</div>{% endif %}
         </div>
         {% endfor %}
     </div>

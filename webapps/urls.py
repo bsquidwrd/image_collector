@@ -21,6 +21,7 @@ from django.views import static
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^admin', admin.site.urls),
     url(r'^media/(?P<path>.*)$', static.serve, {'document_root': settings.MEDIA_ROOT}),
     url(r'^static/(?P<path>.*)$', static.serve, {'document_root': settings.STATICFILES_DIR}),
     url(r'^humans.txt$', TemplateView.as_view(template_name='humans.txt', content_type='text/plain'), name='humans'),
