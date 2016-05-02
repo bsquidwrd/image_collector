@@ -8,6 +8,9 @@ import json
 import time
 import math
 import re
+import datetime
+
+from django.utils import timezone
 
 from image_collector.api.classes import WebsiteInstance, UserInstance
 from image_collector.api.classes import PostInstance, ImageInstance
@@ -103,7 +106,8 @@ def download_user_favorites(username, bad_tries=0):
                         description=linkRegex.sub(r'<a target="_blank" href="\1">\1</a>', post_description.replace('\n', '<br/>')),
                         user=user,
                         permalink=item.get('link'),
-                        nsfw=post_nsfw
+                        nsfw=post_nsfw,
+                        timestamp=timezone.make_aware(datetime.datetime.fromtimestamp(item.get('datetime'))),
                     )
                     try:
                         post.process()
@@ -208,6 +212,7 @@ def process_image(image, username, post=None):
             url=image_url,
             title=image_title,
             description=linkRegex.sub(r'<a target="_blank" href="\1">\1</a>', image_description.replace('\n', '<br/>')),
+            timestamp=timezone.make_aware(datetime.datetime.fromtimestamp(image.get('datetime'))),
         ).process()
         post.add_image(processed_image)
         print("Processed favorite for %s image %s for post %s" % (username, processed_image, post.get_post()))
