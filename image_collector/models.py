@@ -104,7 +104,7 @@ class Image(models.Model):
     def __str__(self):
         return self.file.name
 
-    timestamp = models.DateTimeField(default=timezone.now, editable=False)
+    timestamp = models.DateTimeField(default=timezone.now)
     file = models.FileField()
     # user = models.ForeignKey(ImageUser, related_name='image_user', null=True)
     image_id = models.CharField(max_length=255, blank=True, null=True)
