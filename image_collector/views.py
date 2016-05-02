@@ -32,6 +32,12 @@ def index_view(request):
         post_list = post_list.filter(qset)
     except:
         pass
+    sort_key = request.GET.get('sort', 'desc')
+    if sort_key == 'asc':
+        sort_by = '-timestamp'
+    else:
+        sort_by = 'timestamp'
+    post_list = post_list.order_by(sort_by)
     paginator = Paginator(post_list, items_per_page)
     page = request.GET.get('page')
     try:
