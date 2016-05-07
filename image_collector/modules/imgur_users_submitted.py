@@ -236,6 +236,10 @@ def handle_command():
     for user in users:
         try:
             download_user_submissions(user)
-        except:
+        except RateLimitHit:
+            print("RateLimit Reached")
+            break
+        except Exception as e:
+            print("Got error for %s: %s" % (user, e))
             continue
 
