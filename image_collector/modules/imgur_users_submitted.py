@@ -4,6 +4,7 @@
 # Created on: 4/6/2016
 
 import requests
+import grequests
 import json
 import time
 import math
@@ -63,6 +64,7 @@ class RateLimitHit(Exception):
 
 def download_user_submissions(username, bad_tries=0):
     error_tries = bad_tries
+    total_images = []
 
     # Get the gallery profile of the user to know how many submissions there should be
     gallery_url = '%s/account/%s/gallery_profile' % (base_api_url, username)
@@ -74,13 +76,12 @@ def download_user_submissions(username, bad_tries=0):
         # seems to be the amount sent by the submissions API endpoint
         total_posts = int(float(gallery_info['total_gallery_submissions']))
         total_pages = math.ceil(total_posts / 60)
-        for page_num in range(0, total_pages + 1):
-
-            submissions_url = '%s/account/%s/submissions/%s/?%s' % (base_api_url, username, page_num, global_parameters)
-
-            user_response = requests.get(url=submissions_url, headers=request_headers)
+        page_urls = [('%s/account/%s/gallery_favorites/%s/?%s' % (base_api_url, username, page_num, global_parameters)) for page_num in range(0, total_pages + 1)]
+        rs = (grequests.get(u, headers=request_headers) for u in page_urls)
+        page_responses = grequests.map(rs)
+        for user_response in page_responses:
             if user_response.ok:
-                user_json = json.loads(user_response.text)
+                user_json = user_response.json()
 
                 for item in user_json['data']:
                     post_username = item.get('account_url', username)
@@ -223,14 +224,15 @@ def process_image(image, username, post=None):
 def handle_command():
     if not isinstance(storageData, dict):
         print("Storage Data is not a dictionary")
-        return False
+        return
     website = WebsiteInstance(
         name='Imgur',
         url='http://imgur.com',
         short_name='imgur'
     ).get_website()
     if website != credentials.website:
-        return False
+        print("Website does not match credentials")
+        return
     users = storageData.get('users', ['bsquidwrd'])
     for user in users:
         try:
