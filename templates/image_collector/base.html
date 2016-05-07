@@ -69,40 +69,7 @@
         {% endif %}
         <!-- /ERROR HANDLING -->
 
-        <!-- PAGINATION -->
-        {% if posts.has_previous or posts.has_next or users.has_previous or users.has_next or sites.has_previous or sites.has_next %}
-        <div class="pagination">
-            <span class="step-links">
-                {% if posts.has_previous %}
-                    <a href="?page={{ posts.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">Previous</a>
-                {% elif users.has_previous %}
-                    <a href="?page={{ users.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">Previous</a>
-                {% elif sites.has_previous %}
-                    <a href="?page={{ sites.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">Previous</a>
-                {% endif %}
-
-                <span class="current">
-                    Page
-                    {% if posts %}
-                        {{ posts.number }} of {{ posts.paginator.num_pages }}
-                    {% elif users %}
-                        {{ users.number }} of {{ users.paginator.num_pages }}
-                    {% elif sites %}
-                        {{ sites.number }} of {{ sites.paginator.num_pages }}
-                    {% endif %}
-                </span>
-
-                {% if posts.has_next %}
-                    <a href="?page={{ posts.next_page_number }}{% if search %}&search={{ search }}{% endif %}">Next</a>
-                {% elif users.has_next %}
-                    <a href="?page={{ users.next_page_number }}{% if search %}&search={{ search }}{% endif %}">Next</a>
-                {% elif sites.has_next %}
-                    <a href="?page={{ sites.next_page_number }}{% if search %}&search={{ search }}{% endif %}">Next</a>
-                {% endif %}
-            </span>
-        </div>
-        {% endif %}
-        <!-- /PAGINATION -->
+        {% include 'image_collector/pagination.html' %}
 
         <div class="row">
         <!-- CONTENT -->
@@ -110,40 +77,7 @@
         <!-- /CONTENT -->
         </div>
 
-        <!-- PAGINATION -->
-        {% if posts.has_previous or posts.has_next or users.has_previous or users.has_next or sites.has_previous or sites.has_next %}
-        <div class="pagination">
-            <span class="step-links">
-                {% if posts.has_previous %}
-                    <a href="?page={{ posts.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">Previous</a>
-                {% elif users.has_previous %}
-                    <a href="?page={{ users.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">Previous</a>
-                {% elif sites.has_previous %}
-                    <a href="?page={{ sites.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">Previous</a>
-                {% endif %}
-
-                <span class="current">
-                    Page
-                    {% if posts %}
-                        {{ posts.number }} of {{ posts.paginator.num_pages }}
-                    {% elif users %}
-                        {{ users.number }} of {{ users.paginator.num_pages }}
-                    {% elif sites %}
-                        {{ sites.number }} of {{ sites.paginator.num_pages }}
-                    {% endif %}
-                </span>
-
-                {% if posts.has_next %}
-                    <a href="?page={{ posts.next_page_number }}{% if search %}&search={{ search }}{% endif %}">Next</a>
-                {% elif users.has_next %}
-                    <a href="?page={{ users.next_page_number }}{% if search %}&search={{ search }}{% endif %}">Next</a>
-                {% elif sites.has_next %}
-                    <a href="?page={{ sites.next_page_number }}{% if search %}&search={{ search }}{% endif %}">Next</a>
-                {% endif %}
-            </span>
-        </div>
-        {% endif %}
-        <!-- /PAGINATION -->
+        {% include 'image_collector/pagination.html' %}
         <br/><br/>
 
     </div>  <!-- container div -->
