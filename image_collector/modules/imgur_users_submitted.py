@@ -76,7 +76,7 @@ def download_user_submissions(username, bad_tries=0):
         # seems to be the amount sent by the submissions API endpoint
         total_posts = int(float(gallery_info['total_gallery_submissions']))
         total_pages = math.ceil(total_posts / 60)
-        page_urls = [('%s/account/%s/gallery_favorites/%s/?%s' % (base_api_url, username, page_num, global_parameters)) for page_num in range(0, total_pages + 1)]
+        page_urls = [('%s/account/%s/submissions/%s/?%s' % (base_api_url, username, page_num, global_parameters)) for page_num in range(0, total_pages + 1)]
         rs = (grequests.get(u, headers=request_headers) for u in page_urls)
         page_responses = grequests.map(rs)
         for user_response in page_responses:
