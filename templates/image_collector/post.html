@@ -4,7 +4,7 @@
 {% block nav-users %}<li class="active"><a href="{% url 'ic:user_view' post.user.username %}">User</a></li>{% endblock %}
 {% block content %}
 <div class="col-sm-9">
-    <div class="{% if post.nsfw %}nsfw{% endif %} post panel panel-primary" id="{{ post.pk }}">
+    <div class="{% if post.nsfw %}nsfw{% endif %} post panel panel-primary" id="post-{{ post.pk }}">
         <div class="panel-heading">
             <h3 class="post-title panel-title">
                 {{ post.title }}{% if post.images.all.count > 1 %}<span class="badge pull-right">{{ post.images.all.count }}</span>{% endif %}
@@ -12,7 +12,7 @@
         </div>
         {% if post.description.strip|length > 2 %}<div class="post-description word-wrap well">{{ post.description |safe}}</div>{% endif %}
         {% for image in post.images.all %}
-        <div class="post-image panel-body" id="{{ image.image_id }}">
+        <div class="post-image panel-body" id="post-image-{{ image.image_id }}">
             {% if post.title != image.title %}<div class="image-title h3">{{ image.title }}</div>{% else %}<br/>{% endif %}
             {% include 'image_collector/render_image.html' %}
             {% if image.description.strip|length > 2 and post.description != image.description %}<div class="image-description word-wrap well">{{ image.description |safe}}</div>{% endif %}
