@@ -89,7 +89,7 @@ class Credential(models.Model):
     notes = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
-        return "Credentials for %s (%s)" % (str(self.name), str(self.credential_key))
+        return "%s: %s" % (str(self.website), str(self.name))
 
 
 class ImageUser(models.Model):
@@ -145,12 +145,12 @@ class Log(models.Model):
 
 
 class Storage(models.Model):
-    defaultJson = json.dumps({"users": ["bsquidwrd"]})
+    defaultJson = json.loads('{"users": ["bsquidwrd"]}')
     credential = models.ForeignKey(Credential)
     jsonData = JSONField(default=defaultJson)
 
     def __str__(self):
-        return "Storage for %s" % str(self.credential.name)
+        return "%s" % str(self.credential)
 
 ##
 # Catch signals and do things with them
