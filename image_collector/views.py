@@ -28,7 +28,12 @@ def index_view(request):
     try:
         search_key = request.GET.get('search')
         search_terms = search_key.split()
-        qset = reduce(operator.__or__, [Q(title__icontains=search_term) | Q(description__icontains=search_term) for search_term in search_terms])
+        qset = reduce(operator.__or__, [
+            Q(title__icontains=search_term) |
+            Q(description__icontains=search_term) |
+            Q(user__username__icontains=search_term) |
+            Q(website__name__icontains=search_term)
+            for search_term in search_terms])
         post_list = post_list.filter(qset)
     except:
         pass
@@ -71,7 +76,6 @@ def index_view(request):
         'page_title': page_title,
         'home': True,
     }
-    print(context)
     return render(request, template, context=context)
 
 
@@ -94,9 +98,11 @@ def sites_view(request):
         try:
             search_key = request.GET.get('search')
             search_terms = search_key.split()
-            qset = reduce(operator.__or__,
-                          [Q(title__icontains=search_term) | Q(description__icontains=search_term) for search_term in
-                           search_terms])
+            qset = reduce(operator.__or__, [
+                Q(title__icontains=search_term) |
+                Q(description__icontains=search_term) |
+                Q(user__username__icontains=search_term)
+                for search_term in search_terms])
             searched_posts = Post.objects.filter(active=True).filter(qset)
             site_list = []
             for post in searched_posts:
@@ -195,9 +201,11 @@ def site_view(request, site):
     try:
         search_key = request.GET.get('search')
         search_terms = search_key.split()
-        qset = reduce(operator.__or__,
-                      [Q(title__icontains=search_term) | Q(description__icontains=search_term) for search_term in
-                       search_terms])
+        qset = reduce(operator.__or__, [
+            Q(title__icontains=search_term) |
+            Q(description__icontains=search_term) |
+            Q(user__username__icontains=search_term)
+            for search_term in search_terms])
         post_list = post_list.filter(qset)
     except:
         pass
@@ -295,9 +303,12 @@ def users_view(request):
         try:
             search_key = request.GET.get('search')
             search_terms = search_key.split()
-            qset = reduce(operator.__or__,
-                          [Q(title__icontains=search_term) | Q(description__icontains=search_term) for search_term in
-                           search_terms])
+            qset = reduce(operator.__or__, [
+                Q(title__icontains=search_term) |
+                Q(description__icontains=search_term) |
+                Q(user__username__icontains=search_term) |
+                Q(website__name__icontains=search_term)
+                for search_term in search_terms])
             searched_posts = Post.objects.filter(active=True).filter(qset)
             user_list = []
             for post in searched_posts:
@@ -386,11 +397,14 @@ def user_view(request, username):
         post_list = Post.objects.filter(user=image_user, active=True)
         try:
             search_key = request.GET.get('search')
-            search_terms = search_key.split()
-            qset = reduce(operator.__or__,
-                          [Q(title__icontains=search_term) | Q(description__icontains=search_term) for search_term in
-                           search_terms])
-            post_list = post_list.filter(qset)
+            if search_key not in username and search_key != username:
+                search_terms = search_key.split()
+                qset = reduce(operator.__or__, [
+                    Q(title__icontains=search_term) |
+                    Q(description__icontains=search_term) |
+                    Q(website__name__icontains=search_term)
+                    for search_term in search_terms])
+                post_list = post_list.filter(qset)
         except:
             pass
         paginator = Paginator(post_list, items_per_page)
