@@ -103,7 +103,7 @@ def download_user_submissions(username, bad_tries=0):
                     post = PostInstance(
                         website=credentials.website,
                         title=item.get('title', ''),
-                        description=linkRegex.sub(r'<a target="_blank" href="\1">\1</a>', post_description.replace('\n', ' <br/> ')),
+                        description=linkRegex.sub(r'<a target="_blank" href="\1">\1</a>', post_description).replace('\n', '<br/>'),
                         user=user,
                         permalink=item.get('link'),
                         nsfw=post_nsfw,
@@ -211,7 +211,7 @@ def process_image(image, username, post=None):
         processed_image = ImageInstance(
             url=image_url,
             title=image_title,
-            description=linkRegex.sub(r'<a target="_blank" href="\1">\1</a>', image_description.replace('\n', ' <br/> ')),
+            description=linkRegex.sub(r'<a target="_blank" href="\1">\1</a>', image_description).replace('\n', '<br/>'),
             timestamp=timezone.make_aware(datetime.datetime.fromtimestamp(image.get('datetime'))),
         ).process()
         post.add_image(processed_image)
