@@ -142,6 +142,8 @@ def download_user_submissions(username, bad_tries=0):
                             post.set_etag(image_etag)
                         except:
                             continue
+                    if len(post.get_post().images.all()) == 0:
+                        post.get_post().delete()
             else:
                 # Error handling since the response wasn't ok
                 # This also checks if the app should quit based on quit_codes
