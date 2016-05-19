@@ -13,5 +13,4 @@
 # TECHNOLOGY COLOPHON
 
     CSS, HTML, Python, Django,
-    PostgreSQL, Bootstrap,
-    nginx, BitBucket and git
+    Bootstrap, nginx, BitBucket and git
