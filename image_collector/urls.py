@@ -17,5 +17,6 @@ urlpatterns = [
     url(r'^site$', views.sites_view, name='sites_view'),
     url(r'^site/(?P<site>\w+)$', views.site_view, name='site_view'),
     url(r'^post/(?P<post_id>\w+)$', views.post_view, name='post_view'),
+    url(r'^post/(?P<post_id>\w+)/download$', views.download_post_view, name='download_post_view'),
     url(r'^(?P<requested_image>.*)$', views.image_view, name='image_view'),
 ]

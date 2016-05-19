@@ -169,7 +169,7 @@ def site_view(request, site):
     template = 'image_collector/base_layout.html'
     breadcrumbs = []
     search_key = None
-    page_title = "No site found"
+    page_title = "Site not found"
     breadcrumbs.append({
         'name': 'Home',
         'link': reverse('ic:index'),
@@ -242,7 +242,7 @@ def post_view(request, post_id):
     template = 'image_collector/post.html'
     index_template = 'image_collector/base_layout.html'
     breadcrumbs = []
-    page_title = "No post found"
+    page_title = "Post not found"
 
     try:
         post = Post.objects.get(pk=post_id)
@@ -372,7 +372,7 @@ def user_view(request, username):
     template = 'image_collector/base_layout.html'
     breadcrumbs = []
     search_key = None
-    page_title = "No user found"
+    page_title = "User not found"
     try:
         image_user = ImageUser.objects.get(username__iexact=username)
         page_title = str(image_user.username)
@@ -453,6 +453,26 @@ def random_view(request):
 def newest_view(request):
     posts = Post.objects.filter(active=True).order_by('-timestamp')
     return redirect(reverse('ic:post_view', kwargs={'post_id': posts[0].pk}))
+
+
+def download_post_view(request, post_id):
+    template = 'image_collector/post.html'
+    index_template = 'image_collector/base_layout.html'
+    breadcrumbs = []
+    page_title = "Post not found"
+
+    try:
+        post = Post.objects.get(pk=post_id)
+        page_title = str(post.title)
+    except Exception as e:
+        return render(request, index_template, context={
+            'breadcrumbs': breadcrumbs,
+            'error': True,
+            'page_title': page_title,
+            'error_msg': str(e),
+        })
+
+    return HttpResponse("Download for %s" % post.title)
 
 
 def image_view(request, requested_image):
