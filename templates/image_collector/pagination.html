@@ -1,5 +1,5 @@
 {% if posts.has_previous or posts.has_next or users.has_previous or users.has_next or sites.has_previous or sites.has_next %}
-<div class="pagination">
+<div class="pagination hidden-print">
     <span class="step-links">
         {% if posts.has_previous %}
             <a href="?page={{ posts.previous_page_number }}{% if search %}&search={{ search }}{% endif %}">Previous</a>

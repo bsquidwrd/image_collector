@@ -18,7 +18,7 @@
 <body>
     <div role="document" class="container">
         <!-- NAV -->
-        <nav class="navbar navbar-default">
+        <nav class="navbar navbar-default hidden-print">
             <div class="container">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
@@ -54,7 +54,7 @@
             </div>
         </nav>
         {% if breadcrumbs|length > 0 %}
-        <ul class="breadcrumb">
+        <ul class="breadcrumb hidden-print">
             {% for breadcrumb in breadcrumbs %}{% if breadcrumb.active %}
             <li class="active">{{ breadcrumb.name }}</li>{% else %}
             <li><a href="{{ breadcrumb.link }}">{{ breadcrumb.name }}</a></li>{% endif %}{% endfor %}
@@ -65,7 +65,7 @@
         <!-- ERROR HANDLING -->
         {% if error %}
         <div class="alert alert-warning" role="alert">
-            <strong>Warning!</strong> {{ error_msg }}
+            <strong>{{ error_msg }}</strong>
         </div>
         {% endif %}
         <!-- /ERROR HANDLING -->
