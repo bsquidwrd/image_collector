@@ -1,10 +1,15 @@
+import os
+import mimetypes
 import random
 import operator
+import zipfile
+from django.conf import settings
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from django.http.response import HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
+
 
 from image_collector.models import Post, Image, ImageUser, Website, MimeType, Extension
 
@@ -460,10 +465,26 @@ def download_post_view(request, post_id):
     index_template = 'image_collector/base_layout.html'
     breadcrumbs = []
     page_title = "Post not found"
+    zip_archive = None
 
     try:
         post = Post.objects.get(pk=post_id)
         page_title = str(post.title)
+
+        zip_name = '%s.zip' % post.id
+        zip_path = os.path.join(settings.MEDIA_ROOT, 'zips', zip_name)
+        zip_download_name = 'Image Collector - %s.zip' % post.title
+
+        if not os.path.isfile(zip_path):
+            zip_archive = zipfile.ZipFile(zip_path, 'w')
+            zfill_count = len(str(len(post.images.all())))
+            for idx, image in enumerate(post.images.all()):
+                filename, file_extension = os.path.splitext(image.file.path)
+                image_number = str(idx + 1).zfill(zfill_count)
+                image_name = '%s - %s.%s' % (image_number, image.image_id, file_extension.replace('.',''))
+                zip_archive.write(image.file.path, image_name)
+        else:
+            zip_archive = zipfile.ZipFile(zip_path, 'r')
     except Exception as e:
         return render(request, index_template, context={
             'breadcrumbs': breadcrumbs,
@@ -471,8 +492,15 @@ def download_post_view(request, post_id):
             'page_title': page_title,
             'error_msg': str(e),
         })
+    finally:
+        if zip_archive:
+            zip_archive.close()
 
-    return HttpResponse("Download for %s" % post.title)
+    mime_type = mimetypes.guess_type(zip_path)[0]
+    response = HttpResponse(open(zip_path, 'rb').read(), content_type=mime_type)
+    response['Content-Disposition'] = 'attachment; filename=%s' % zip_download_name
+    response['Content-Length'] = os.path.getsize(zip_path)
+    return response
 
 
 def image_view(request, requested_image):
@@ -486,12 +514,18 @@ def image_view(request, requested_image):
         except:
             files_ext = image.file.name.split('.')
             ext = Extension.objects.get(extension=files_ext[-1])
-            mime_type = MimeType.objects.get(extension=ext).mime
+            # mime_type = MimeType.objects.get(extension=ext).mime
+            print("Rendering image %s as %s" % (image.image_id, mime_type))
+            mime_type = mimetypes.guess_type(image.file.name)
         with open(image.file.path, 'rb') as image_file:
             response = HttpResponse(image_file.read(), content_type=mime_type)
             response['Content-Disposition'] = 'filename=%s.%s' % (image_id, image_ext)
-            return response
     except Exception as e:
-        return render(request, template, context={'error': True, 'error_msg': str(e)})
+        context = {
+            'error': True,
+            'error_msg': str(e)
+        }
+        response = render(request, template, context)
+    return response
 
 

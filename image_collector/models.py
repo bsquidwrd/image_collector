@@ -1,6 +1,7 @@
 import os
 import inspect
 import json
+import mimetypes
 from enum import Enum
 
 from jsonfield import JSONField
@@ -110,7 +111,8 @@ class Image(models.Model):
     image_id = models.CharField(max_length=255, blank=True, null=True)
     title = models.CharField(max_length=4000, blank=True)
     description = models.CharField(max_length=4000, blank=True)
-    mime_type = models.ForeignKey(MimeType, null=True, blank=True)
+    # mime_type = models.ForeignKey(MimeType, null=True, blank=True)
+    mime_type = models.CharField(max_length=255, blank=True, null=True)
 
 
 class Post(models.Model):
@@ -255,8 +257,12 @@ def populate_image_mime_type(sender, instance, *args, **kwargs):
     if instance.mime_type:
         return
     try:
-        image_info = instance.file.name.split('.')
-        mime_type = MimeType.objects.get(extension__extension=image_info[-1])
+        # image_info = instance.file.name.split('.')
+        # mime_type = MimeType.objects.get(extension__extension=image_info[-1])
+        if 'webm' in instance.file.name:
+            mime_type = 'video/webm'
+        else:
+            mime_type = mimetypes.guess_type(instance.file.name)[0]
         if instance.mime_type != mime_type:
             instance.mime_type = mime_type
             instance.save()
@@ -341,6 +347,26 @@ def delete_image_after_model_delete(sender, instance, *args, **kwargs):
         except Exception as e:
             log_action(instance, 'delete image from disk', LogResult.fail.value, str(e),
                        image=instance
+                       )
+            print(e)
+    if isinstance(instance, Post):
+        try:
+            zip_name = '%s.zip' % instance.id
+            zip_path = os.path.join(settings.MEDIA_ROOT, 'zips', zip_name)
+            if os.path.isfile(zip_path):
+                os.remove(zip_path)
+                if not os.path.isfile(zip_path):
+                    log_action(instance, 'delete post from disk', LogResult.success.value,
+                               '%s file no longer exists on disk' % str(instance.file),
+                               post=instance
+                               )
+                else:
+                    log_action(instance, 'delete post from disk', LogResult.fail.value, 'file still exists on disk',
+                               post=instance
+                               )
+        except Exception as e:
+            log_action(instance, 'delete post from disk', LogResult.fail.value, str(e),
+                       post=instance
                        )
             print(e)
 
