@@ -515,7 +515,6 @@ def image_view(request, requested_image):
             files_ext = image.file.name.split('.')
             ext = Extension.objects.get(extension=files_ext[-1])
             # mime_type = MimeType.objects.get(extension=ext).mime
-            print("Rendering image %s as %s" % (image.image_id, mime_type))
             mime_type = mimetypes.guess_type(image.file.name)
         with open(image.file.path, 'rb') as image_file:
             response = HttpResponse(image_file.read(), content_type=mime_type)
