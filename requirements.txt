@@ -1,0 +1,6 @@
+Django==1.10.4
+gevent==1.2.0
+greenlet==0.4.11
+jsonfield==1.0.3
+Pillow==3.2.0
+requests==2.12.4
