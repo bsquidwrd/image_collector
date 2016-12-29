@@ -222,7 +222,7 @@ def log_changed_models(sender, instance, *args, **kwargs):
             setattr(log_item, instance.__class__.__name__, instance)
             if "image" in attributes:
                 try:
-                    log_item.image = str(getattr(old_model, "iamge", ""))
+                    log_item.image = str(getattr(old_model, "image", ""))
                 except:
                     pass
             if "post" in attributes:
